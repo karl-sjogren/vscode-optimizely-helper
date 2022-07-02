@@ -1,8 +1,12 @@
 {
-  "name": "karls-optimizely-helpers",
+	"name": "karls-optimizely-helpers",
 	"displayName": "Karls Optimizely Helpers",
 	"description": "Adds some helpful commands and stuff for working with Optimizely CMS",
 	"version": "0.0.1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/karl-sjogren/vscode-optimizely-helper"
+	},
 	"engines": {
 		"vscode": "^1.68.0"
 	},
@@ -10,7 +14,7 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:karls-optimizely-helpers.helloWorld"
+		"onCommand:karls-optimizely-helpers.helloWorld"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
