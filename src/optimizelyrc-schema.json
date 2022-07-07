@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "contentTypePath": {
+        "type": "string"
+      },
+      "contentTypeBaseNamespace": {
+        "type": "string",
+        "pattern": "^[_a-z]+[._a-z]*[_a-z]+?$"
+      },
+      "defaultContentTypeBaseClass": {
+        "type": "string",
+        "pattern": "^[_a-z]+[._a-z]*[_a-z]+?$"
+      },
+      "defaultContentComponentBaseClass": {
+        "type": "string",
+        "pattern": "^[_a-z]+[._a-z]*[_a-z]+?$"
+      }
+    },
+    "required": [
+      "contentTypePath",
+      "contentTypeBaseNamespace",
+      "defaultContentTypeBaseClass",
+      "defaultContentComponentBaseClass"
+    ]
+  }
