@@ -14,14 +14,22 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:karls-optimizely-helpers.helloWorld"
+		"*",
+		"workspaceContains:**/.csproj",
+		"workspaceContains:**/.optimizely.rc"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "karls-optimizely-helpers.helloWorld",
-				"title": "Hello World"
+				"command": "karls-optimizely-helpers.createContentType",
+				"title": "Optimizely: Create content type"
+			}
+		],
+		"jsonValidation": [
+			{
+				"fileMatch": ".optimizelyrc",
+				"url": "./src/optimizelyrc-schema.json"
 			}
 		]
 	},
