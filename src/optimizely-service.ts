@@ -6,6 +6,7 @@ import { access, writeFile } from 'node:fs/promises';
 import { Buffer } from 'node:buffer';
 import * as childProcess from 'node:child_process';
 import OptimizelyConfig from './OptimizelyConfig';
+import { formatDocument } from './helpers/document-helpers';
 
 const exec = promisify(childProcess.exec);
 
@@ -17,6 +18,8 @@ const DEFAULT_CONFIG: OptimizelyConfig = {
 };
 
 class OptimizelyService {
+    static configFileName = '.optimizelyrc.json';
+
     async checkForTemplates(): Promise<boolean> {
         const { stdout, stderr } = await exec('dotnet new list');
 
@@ -50,7 +53,7 @@ class OptimizelyService {
         }
 
         const workspace = vscode.workspace.workspaceFolders[0].uri.fsPath;
-        const path = join(workspace, '.optimizelyrc');
+        const path = join(workspace, OptimizelyService.configFileName);
 
         return path;
     }
@@ -77,16 +80,20 @@ class OptimizelyService {
 
         const configPath = await this.#getConfigPath();
         try {
-            const defaultConfig = JSON.stringify(DEFAULT_CONFIG, null, 2);
+            const defaultConfig = JSON.stringify(DEFAULT_CONFIG);
             const data = new Uint8Array(Buffer.from(defaultConfig));
             await writeFile(configPath!, data);
         } catch (err) {
             console.error(err);
+            return; // TODO Show messagebox?
         }
+
+        const uri = vscode.Uri.file(configPath!);
+        await formatDocument(uri);
 
         if(openInEditor) {
             const document = await vscode.workspace.openTextDocument(configPath!);
-            await vscode.window.showTextDocument(document, 1, false);
+            await vscode.window.showTextDocument(document, undefined, false);
         }
     }
 }

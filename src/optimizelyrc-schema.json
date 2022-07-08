@@ -7,15 +7,15 @@
       },
       "contentTypeBaseNamespace": {
         "type": "string",
-        "pattern": "^[_a-z]+[._a-z]*[_a-z]+?$"
+        "pattern": "(?i)^$|^[_a-z]+[._a-z]*[_a-z]+?$"
       },
       "defaultContentTypeBaseClass": {
         "type": "string",
-        "pattern": "^[_a-z]+[._a-z]*[_a-z]+?$"
+        "pattern": "(?i)^$|^[_a-z]+[._a-z]*[_a-z]+?$"
       },
       "defaultContentComponentBaseClass": {
         "type": "string",
-        "pattern": "^[_a-z]+[._a-z]*[_a-z]+?$"
+        "pattern": "(?i)^$|^[_a-z]+[._a-z]*[_a-z]+?$"
       }
     },
     "required": [

@@ -28,7 +28,7 @@
 		],
 		"jsonValidation": [
 			{
-				"fileMatch": ".optimizelyrc",
+				"fileMatch": ".optimizelyrc.json",
 				"url": "./src/optimizelyrc-schema.json"
 			}
 		]
