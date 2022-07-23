@@ -15,3 +15,8 @@ export let formatDocument = async(uri : vscode.Uri) : Promise<void> => {
         await document.save();
     }
 };
+
+export let openDocument = async(uri : vscode.Uri) : Promise<void> => {
+    const document = await vscode.workspace.openTextDocument(uri);
+    await vscode.window.showTextDocument(document, undefined, false);
+};

@@ -6,15 +6,15 @@ import { access, writeFile } from 'node:fs/promises';
 import { Buffer } from 'node:buffer';
 import * as childProcess from 'node:child_process';
 import OptimizelyConfig from './OptimizelyConfig';
-import { formatDocument } from './helpers/document-helpers';
+import { formatDocument, openDocument } from './helpers/document-helpers';
 
 const exec = promisify(childProcess.exec);
 
 const DEFAULT_CONFIG: OptimizelyConfig = {
     contentTypePath: '',
     contentTypeBaseNamespace: '',
-    defaultContentTypeBaseClass: 'PageData',
-    defaultContentComponentBaseClass: 'BlockData'
+    defaultContentTypeBaseClass: 'EPiServer.Core.PageData',
+    defaultContentComponentBaseClass: 'EPiServer.Core.BlockData'
 };
 
 class OptimizelyService {
@@ -92,8 +92,7 @@ class OptimizelyService {
         await formatDocument(uri);
 
         if(openInEditor) {
-            const document = await vscode.workspace.openTextDocument(configPath!);
-            await vscode.window.showTextDocument(document, undefined, false);
+            await openDocument(uri);
         }
     }
 }
