@@ -36,6 +36,12 @@
 	"extensionDependencies": [
 		"ms-dotnettools.csharp"
 	],
+	"capabilities": {
+		"untrustedWorkspaces": {
+			"supported": false,
+			"description": "Workspaces with untrusted content are not supported to be safe."
+		}
+	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",

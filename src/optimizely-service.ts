@@ -2,23 +2,31 @@ import * as vscode from 'vscode';
 import { promisify } from 'node:util';
 import { join, } from 'node:path';
 import { constants } from 'node:fs';
-import { access, writeFile } from 'node:fs/promises';
+import { access, readFile, writeFile } from 'node:fs/promises';
 import { Buffer } from 'node:buffer';
 import * as childProcess from 'node:child_process';
-import OptimizelyConfig from './OptimizelyConfig';
+import OptimizelyConfig from './optimizely-config';
 import { formatDocument, openDocument } from './helpers/document-helpers';
 
 const exec = promisify(childProcess.exec);
 
 const DEFAULT_CONFIG: OptimizelyConfig = {
-    contentTypePath: '',
-    contentTypeBaseNamespace: '',
-    defaultContentTypeBaseClass: 'EPiServer.Core.PageData',
-    defaultContentComponentBaseClass: 'EPiServer.Core.BlockData'
+    contentTypePath: './',
+    contentTypeBaseNamespace: 'ContentTypes',
+    contentTypeBaseClass: 'EPiServer.Core.PageData',
+    contentComponentPath: './',
+    contentComponentNamespace: 'Components',
+    contentComponentBaseClass: 'EPiServer.Core.BlockData'
 };
 
 class OptimizelyService {
     static configFileName = '.optimizelyrc.json';
+    
+    #outputChannel: vscode.OutputChannel;
+
+    constructor() {
+        this.#outputChannel = vscode.window.createOutputChannel('Optimizely');
+    }
 
     async checkForTemplates(): Promise<boolean> {
         const { stdout, stderr } = await exec('dotnet new list');
@@ -35,16 +43,21 @@ class OptimizelyService {
         return await this.checkForTemplates();
     }
 
-    async createContentType(contentType = 'BlockData'): Promise<void> {
-        const namespace = '';
+    async executeProcess(command: string): Promise<string> {
+        this.#outputChannel.appendLine(`Executing: ${command}`);
 
-        const { stdout, stderr } = await exec(`dotnet new -h epi-cms-contentcomponent --namespace ${namespace} --contentType ${contentType}`);
-    }
+        const { stdout, stderr } = await exec(command);
+        if(stdout) {
+            this.#outputChannel.appendLine(stdout);
+        }
 
-    async createContentComponent(basetype = 'PageData'): Promise<void> {
-        const namespace = '';
+        if(stderr) {
+            this.#outputChannel.appendLine(`Failed when executing: ${command}`);
+            this.#outputChannel.appendLine(stderr);
+            throw new Error(stderr);
+        }
 
-        const { stdout, stderr } = await exec(`dotnet new -h epi-cms-contentcomponent --namespace ${namespace} --basetype ${basetype}`);
+        return stdout;
     }
 
     async #getConfigPath(): Promise<null | string> {
@@ -94,6 +107,16 @@ class OptimizelyService {
         if(openInEditor) {
             await openDocument(uri);
         }
+    }
+
+    async readConfig(): Promise<OptimizelyConfig> {
+        const configPath = await this.#getConfigPath();
+        if (configPath === null) {
+            return DEFAULT_CONFIG;
+        }
+
+        const data = await readFile(configPath, 'utf8');
+        return JSON.parse(data);
     }
 }
 

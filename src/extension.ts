@@ -1,20 +1,26 @@
 import * as vscode from 'vscode';
+import NetOptimizelyTemplateService from './net-optimizely-template-service';
 import { service } from './optimizely-service';
 
 export function activate(context: vscode.ExtensionContext) {
 	checkForTemplates();
 	checkForConfigFile();
 
+	const templateService = new NetOptimizelyTemplateService(service);
+
 	let disposable = vscode.commands.registerCommand('karls-optimizely-helpers.createContentType', async () => {
-		const name = await vscode.window.showInputBox({
-			prompt: "Content type name: ",
+		let name = await vscode.window.showInputBox({
+			prompt: "Content type name:",
 			placeHolder: "StartPage"
 		});
 
-		if(name?.trim().length === 0) {
+		name = name?.trim() || '';
+
+		if(name.length === 0) {
 			return;
 		}
 
+		await templateService.createContentType(name);
 	});
 
 	context.subscriptions.push(disposable);

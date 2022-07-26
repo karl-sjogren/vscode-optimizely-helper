@@ -6,22 +6,37 @@
         "type": "string"
       },
       "contentTypeBaseNamespace": {
-        "type": "string",
-        "pattern": "(?i)^$|^[_a-z]+[._a-z]*[_a-z]+?$"
+        "$ref": "#/definitions/namespace"
       },
-      "defaultContentTypeBaseClass": {
-        "type": "string",
-        "pattern": "(?i)^$|^[_a-z]+[._a-z]*[_a-z]+?$"
+      "contentTypeBaseClass": {
+        "$ref": "#/definitions/type"
       },
-      "defaultContentComponentBaseClass": {
-        "type": "string",
-        "pattern": "(?i)^$|^[_a-z]+[._a-z]*[_a-z]+?$"
+      "contentComponentPath": {
+        "type": "string"
+      },
+      "contentComponentNamespace": {
+        "$ref": "#/definitions/namespace"
+      },
+      "contentComponentBaseClass": {
+        "$ref": "#/definitions/type"
       }
     },
     "required": [
       "contentTypePath",
       "contentTypeBaseNamespace",
-      "defaultContentTypeBaseClass",
-      "defaultContentComponentBaseClass"
-    ]
+      "contentTypeBaseClass",
+      "contentComponentPath",
+      "contentComponentNamespace",
+      "contentComponentBaseClass"
+    ],
+    "definitions": {
+      "namespace": {
+        "type": "string",
+        "pattern": "(?i)^$|^[\\w\\d\\s/.]+$"
+      },
+      "type": {
+        "type": "string",
+        "pattern": "(?i)^$|^[_a-z]+[._a-z]*[_a-z]+?$"
+      }
+    }
   }
